@@ -24,6 +24,8 @@ defmodule Mix.Tasks.Day.New do
   defp generate_lib_file(name, module_name, fun_name) do
     """
     defmodule Adventofcode.#{module_name} do
+      use Adventofcode
+
       def #{fun_name}(input) do
         input
       end
@@ -43,10 +45,8 @@ defmodule Mix.Tasks.Day.New do
           assert 1337 = input |> #{fun_name}()
         end
 
-        test "with_puzzle_input" do
-          with_puzzle_input("input/#{name}.txt", fn input ->
-            assert 1337 = input |> #{fun_name}()
-          end)
+        test_with_puzzle_input do
+          assert 1337 = puzzle_input() |> #{fun_name}()
         end
       end
     end

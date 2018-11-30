@@ -1,6 +1,8 @@
 defmodule Adventofcode do
   @moduledoc """
-  Documentation for Adventofcode.
+  Base module for day solutions. By `use`ing this module a `puzzle_input/0`
+  function will be provided that reads puzzle input to a string. Will probably
+  only be used during tests
   """
 
   defmacro __using__(options) do
