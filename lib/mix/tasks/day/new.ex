@@ -21,7 +21,7 @@ defmodule Mix.Tasks.Day.New do
     File.write("test/#{name}_test.exs", contents)
   end
 
-  defp generate_lib_file(name, module_name, fun_name) do
+  defp generate_lib_file(_name, module_name, fun_name) do
     """
     defmodule Adventofcode.#{module_name} do
       use Adventofcode
@@ -33,7 +33,7 @@ defmodule Mix.Tasks.Day.New do
     """
   end
 
-  defp generate_spec_file(name, module_name, fun_name) do
+  defp generate_spec_file(_name, module_name, fun_name) do
     """
     defmodule Adventofcode.#{module_name}Test do
       use Adventofcode.FancyCase
