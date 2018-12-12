@@ -19,9 +19,9 @@ defmodule Adventofcode.FancyCase do
 
   Runs the given function with the contents of the file if it exists.
   """
-  defmacro test_with_puzzle_input(options) do
+  defmacro test_with_puzzle_input(title \\ "with_puzzle_input", options) do
     quote do
-      test "with_puzzle_input" do
+      test unquote(title) do
         if puzzle_input() do
           unquote(Keyword.get(options, :do))
         end
