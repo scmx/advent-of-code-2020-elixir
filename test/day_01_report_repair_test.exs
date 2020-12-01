@@ -21,4 +21,14 @@ defmodule Adventofcode.Day01ReportRepairTest do
       assert 440_979 = puzzle_input() |> part_1()
     end
   end
+
+  describe "part_2/1" do
+    test "triplet that sums to 2020" do
+      assert 241_861_950 = @example_input |> String.trim() |> part_2()
+    end
+
+    test_with_puzzle_input do
+      assert 82_498_112 = puzzle_input() |> part_2()
+    end
+  end
 end
