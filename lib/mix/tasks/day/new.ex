@@ -60,11 +60,11 @@ defmodule Mix.Tasks.Day.New do
 
       describe "part_2/1" do
         # test "" do
-        #   assert 1337 = 1337 |> part_1()
+        #   assert 1337 = 1337 |> part_2()
         # end
 
         # test_with_puzzle_input do
-        #   assert 1337 = puzzle_input() |> part_1()
+        #   assert 1337 = puzzle_input() |> part_2()
         # end
       end
     end
