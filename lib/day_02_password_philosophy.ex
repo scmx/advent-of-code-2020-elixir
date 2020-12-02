@@ -1,7 +1,7 @@
 defmodule Adventofcode.Day02PasswordPhilosophy do
   use Adventofcode
 
-  alias __MODULE__.Part1
+  alias __MODULE__.{Part1, Part2}
 
   def part_1(input) do
     input
@@ -12,6 +12,7 @@ defmodule Adventofcode.Day02PasswordPhilosophy do
   def part_2(input) do
     input
     |> parse()
+    |> Part2.run()
   end
 
   defp parse(input) do
@@ -23,6 +24,21 @@ defmodule Adventofcode.Day02PasswordPhilosophy do
 
   defp parse_line(line) do
     Regex.run(~r/^(\d+)-(\d+) ([a-z]): ([a-z]+)$/, line)
+  end
+
+  defmodule Part2 do
+    def run(lines) do
+      lines
+      |> Enum.count(&check_positions/1)
+    end
+
+    defp check_positions([_, index1, index2, char, password]) do
+      [index1, index2]
+      |> Enum.map(&String.to_integer/1)
+      |> Enum.map(&String.at(password, &1 - 1))
+      |> Enum.filter(&(&1 == char))
+      |> length == 1
+    end
   end
 
   defmodule Part1 do

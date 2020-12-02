@@ -20,12 +20,12 @@ defmodule Adventofcode.Day02PasswordPhilosophyTest do
   end
 
   describe "part_2/1" do
-    # test "" do
-    #   assert 1337 = 1337 |> part_1()
-    # end
+    test "" do
+      assert 1 = @example_input |> part_2()
+    end
 
-    # test_with_puzzle_input do
-    #   assert 1337 = puzzle_input() |> part_1()
-    # end
+    test_with_puzzle_input do
+      assert 711 = puzzle_input() |> part_2()
+    end
   end
 end
