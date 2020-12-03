@@ -8,13 +8,14 @@ defmodule Adventofcode.Day03TobogganTrajectory do
   def part_1(input) do
     input
     |> parse()
-    |> traverse(%{x: 3, y: 1})
-    |> Map.get(:result)
+    |> traverse_all([%{x: 3, y: 1}])
   end
 
-  # def part_2(input) do
-  #   input
-  # end
+  def part_2(input) do
+    input
+    |> parse()
+    |> traverse_all([%{x: 1, y: 1}, %{x: 3, y: 1}, %{x: 5, y: 1}, %{x: 7, y: 1}, %{x: 1, y: 2}])
+  end
 
   def parse(input) do
     input
@@ -31,6 +32,12 @@ defmodule Adventofcode.Day03TobogganTrajectory do
     def new(list) do
       %__MODULE__{list: list, size: %{x: list |> hd() |> length, y: list |> length()}}
     end
+  end
+
+  def traverse_all(grid, slopes) do
+    Enum.map(slopes, &traverse(grid, &1))
+    |> Enum.map(&Map.get(&1, :result))
+    |> Enum.reduce(&(&1 * &2))
   end
 
   def traverse(%Grid{pos: %{y: y}, size: %{y: height}} = grid, %{y: y_slope})

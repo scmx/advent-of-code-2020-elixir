@@ -38,12 +38,12 @@ defmodule Adventofcode.Day03TobogganTrajectoryTest do
   end
 
   describe "part_2/1" do
-    # test "" do
-    #   assert 1337 = 1337 |> part_2()
-    # end
+    test "trees encountered on each of the listed slopes" do
+      assert 336 = @example_input |> part_2()
+    end
 
-    # test_with_puzzle_input do
-    #   assert 1337 = puzzle_input() |> part_2()
-    # end
+    test_with_puzzle_input do
+      assert 1_478_615_040 = puzzle_input() |> part_2()
+    end
   end
 end
