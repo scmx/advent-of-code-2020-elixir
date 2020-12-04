@@ -21,7 +21,7 @@ defmodule Adventofcode.Day03TobogganTrajectory do
     input
     |> String.trim()
     |> String.split("\n")
-    |> Enum.map(&String.to_char_list/1)
+    |> Enum.map(&String.to_charlist/1)
     |> Grid.new()
   end
 
