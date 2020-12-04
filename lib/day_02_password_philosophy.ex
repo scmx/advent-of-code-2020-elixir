@@ -64,7 +64,7 @@ defmodule Adventofcode.Day02PasswordPhilosophy do
 
     defp valid_password?(nil), do: false
 
-    defp valid_password?([_, min, max, char, pass]) do
+    defp valid_password?([_, min, max, _, pass]) do
       min = String.to_integer(min)
       max = String.to_integer(max)
       String.length(pass) >= min && String.length(pass) <= max
