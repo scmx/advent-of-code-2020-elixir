@@ -1,7 +1,7 @@
 defmodule Adventofcode.Day04PassportProcessing do
   use Adventofcode
 
-  alias __MODULE__.{Passport, Parser}
+  alias __MODULE__.{Parser, Passport}
 
   def part_1(input) do
     input
@@ -18,15 +18,21 @@ defmodule Adventofcode.Day04PassportProcessing do
     defstruct [:byr, :iyr, :eyr, :hgt, :hcl, :ecl, :pid, :cid, :valid?]
 
     def new(fields) do
-      passport = struct(__MODULE__, fields)
+      struct(__MODULE__, fields)
+      |> check_valid
+    end
+
+    defp check_valid(%Passport{} = passport) do
       %{passport | valid?: valid?(passport)}
     end
 
     defp valid?(passport) do
       @enforce_keys
       |> List.delete(:cid)
-      |> Enum.all?(&(Map.get(passport, &1) != nil))
+      |> Enum.all?(&valid?(passport, &1))
     end
+
+    defp valid?(passport, key), do: Map.get(passport, key) != nil
   end
 
   defmodule Parser do
