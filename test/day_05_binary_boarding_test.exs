@@ -37,9 +37,9 @@ defmodule Adventofcode.Day05BinaryBoardingTest do
     end
   end
 
-  # describe "part_2/1" do
-  #   test_with_puzzle_input do
-  #     assert 539 = puzzle_input() |> part_2()
-  #   end
-  # end
+  describe "part_2/1" do
+    test_with_puzzle_input do
+      assert 539 = puzzle_input() |> part_2()
+    end
+  end
 end
