@@ -2,6 +2,7 @@ defmodule Adventofcode.Day05BinaryBoardingTest do
   use Adventofcode.FancyCase
 
   import Adventofcode.Day05BinaryBoarding
+  import Adventofcode.Day05BinaryBoarding.Part1
 
   alias Adventofcode.Day05BinaryBoarding.Seat
 
@@ -28,7 +29,7 @@ defmodule Adventofcode.Day05BinaryBoardingTest do
     end
 
     test "the seat has ID 44 * 8 + 5 = 357" do
-      assert 357 = @boarding_pass |> locate |> Seat.id()
+      assert 357 = @boarding_pass |> locate |> Seat.pos() |> unique_seat_id
     end
 
     test_with_puzzle_input do
@@ -36,13 +37,9 @@ defmodule Adventofcode.Day05BinaryBoardingTest do
     end
   end
 
-  describe "part_2/1" do
-    # test "" do
-    #   assert 1337 = 1337 |> part_2()
-    # end
-
-    # test_with_puzzle_input do
-    #   assert 1337 = puzzle_input() |> part_2()
-    # end
-  end
+  # describe "part_2/1" do
+  #   test_with_puzzle_input do
+  #     assert 539 = puzzle_input() |> part_2()
+  #   end
+  # end
 end
