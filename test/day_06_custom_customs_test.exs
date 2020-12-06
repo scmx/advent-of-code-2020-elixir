@@ -40,12 +40,12 @@ defmodule Adventofcode.Day06CustomCustomsTest do
   end
 
   describe "part_2/1" do
-    # test "" do
-    #   assert 1337 = 1337 |> part_2()
-    # end
+    test "questions to which anyone answered yes" do
+      assert 6 = @input |> part_2()
+    end
 
-    # test_with_puzzle_input do
-    #   assert 1337 = puzzle_input() |> part_2()
-    # end
+    test_with_puzzle_input do
+      assert 3402 = puzzle_input() |> part_2()
+    end
   end
 end

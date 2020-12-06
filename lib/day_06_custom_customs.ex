@@ -8,10 +8,24 @@ defmodule Adventofcode.Day06CustomCustoms do
     |> Enum.sum()
   end
 
+  def part_2(input) do
+    input
+    |> parse()
+    |> Enum.map(&do_part_2/1)
+    |> Enum.sum()
+  end
+
   defp do_part_1(group) do
     group
     |> Enum.flat_map(& &1)
     |> MapSet.new()
+    |> MapSet.size()
+  end
+
+  defp do_part_2(group) do
+    group
+    |> Enum.map(&MapSet.new/1)
+    |> Enum.reduce(&MapSet.intersection/2)
     |> MapSet.size()
   end
 
