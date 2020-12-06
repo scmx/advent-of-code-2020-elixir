@@ -72,12 +72,12 @@ defmodule Adventofcode.Day04PassportProcessing do
     end
 
     def valid?(%Passport{valid?: true, hgt: hgt}, :hgt) do
-      case Regex.run(~r/^(\d+)(\w+)$/, hgt) do
-        [_, val, "cm"] ->
-          String.to_integer(val) in 150..193
+      case Integer.parse(hgt) do
+        {val, "cm"} ->
+          val in 150..193
 
-        [_, val, "in"] ->
-          String.to_integer(val) in 59..76
+        {val, "in"} ->
+          val in 59..76
 
         _ ->
           false
@@ -93,7 +93,7 @@ defmodule Adventofcode.Day04PassportProcessing do
     end
 
     def valid?(%Passport{valid?: true, pid: pid}, :pid) do
-      Regex.match?(~r/^[0-9]{9}$/, pid)
+      Regex.match?(~r/^\d{9}$/, pid)
     end
 
     def valid?(%Passport{}, :cid), do: true
