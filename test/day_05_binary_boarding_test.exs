@@ -16,7 +16,7 @@ defmodule Adventofcode.Day05BinaryBoardingTest do
       assert [%Seat{front: 40..47} = seat, pass] = [seat, pass] |> step
       assert [%Seat{front: 44..47} = seat, pass] = [seat, pass] |> step
       assert [%Seat{front: 44..45} = seat, pass] = [seat, pass] |> step
-      assert [%Seat{front: 44..44} = seat, pass] = [seat, pass] |> step
+      assert [%Seat{front: 44..44}, _pass] = [seat, pass] |> step
     end
 
     test "consider just the last 3 characters of FBFBBFFRLR" do
@@ -25,7 +25,7 @@ defmodule Adventofcode.Day05BinaryBoardingTest do
 
       assert [%Seat{left: 4..7} = seat, pass] = [seat, pass] |> step
       assert [%Seat{left: 4..5} = seat, pass] = [seat, pass] |> step
-      assert [%Seat{left: 5..5} = seat, pass] = [seat, pass] |> step
+      assert [%Seat{left: 5..5}, _pass] = [seat, pass] |> step
     end
 
     test "the seat has ID 44 * 8 + 5 = 357" do
