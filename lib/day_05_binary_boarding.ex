@@ -79,6 +79,18 @@ defmodule Adventofcode.Day05BinaryBoarding do
     def upper_half(low..high), do: (div(low + high, 2) + 1)..high
   end
 
+  defp to_map(positions) do
+    Enum.reduce(positions, MapSet.new(), &MapSet.put(&2, &1))
+  end
+
+  def unique_seat_id({front, left}), do: front * 8 + left
+
+  defp parse(input) do
+    input
+    |> String.trim()
+    |> String.split("\n")
+  end
+
   defmodule Printer do
     def print(seats) do
       seats |> to_s |> IO.puts()
@@ -96,17 +108,5 @@ defmodule Adventofcode.Day05BinaryBoarding do
         end) <> " #{front}"
       end)
     end
-  end
-
-  defp to_map(positions) do
-    Enum.reduce(positions, MapSet.new(), &MapSet.put(&2, &1))
-  end
-
-  def unique_seat_id({front, left}), do: front * 8 + left
-
-  defp parse(input) do
-    input
-    |> String.trim()
-    |> String.split("\n")
   end
 end
