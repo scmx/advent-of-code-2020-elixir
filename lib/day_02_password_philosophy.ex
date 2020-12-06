@@ -23,22 +23,14 @@ defmodule Adventofcode.Day02PasswordPhilosophy do
   end
 
   defp parse_line(line) do
-    Regex.run(~r/^(\d+)-(\d+) ([a-z]): ([a-z]+)$/, line)
+    ~r/^(\d+)-(\d+) ([a-z]): ([a-z]+)$/
+    |> Regex.run(line)
+    |> Enum.drop(1)
+    |> do_parse_line
   end
 
-  defmodule Part2 do
-    def run(lines) do
-      lines
-      |> Enum.count(&check_positions/1)
-    end
-
-    defp check_positions([_, index1, index2, char, password]) do
-      [index1, index2]
-      |> Enum.map(&String.to_integer/1)
-      |> Enum.map(&String.at(password, &1 - 1))
-      |> Enum.filter(&(&1 == char))
-      |> length == 1
-    end
+  defp do_parse_line([index1, index2, char, password]) do
+    [String.to_integer(index1), String.to_integer(index2), char, password]
   end
 
   defmodule Part1 do
@@ -51,8 +43,8 @@ defmodule Adventofcode.Day02PasswordPhilosophy do
 
     defp check_occurance(nil), do: nil
 
-    defp check_occurance([line, min, max, char, password]) do
-      [line, min, max, char, do_check_occurance(password, char)]
+    defp check_occurance([min, max, char, password]) do
+      [min, max, char, do_check_occurance(password, char)]
     end
 
     defp do_check_occurance(password, char) do
@@ -62,12 +54,20 @@ defmodule Adventofcode.Day02PasswordPhilosophy do
       |> Enum.join()
     end
 
-    defp valid_password?(nil), do: false
+    defp valid_password?([min, max, _, pass]), do: String.length(pass) in min..max
+  end
 
-    defp valid_password?([_, min, max, _, pass]) do
-      min = String.to_integer(min)
-      max = String.to_integer(max)
-      String.length(pass) >= min && String.length(pass) <= max
+  defmodule Part2 do
+    def run(lines) do
+      lines
+      |> Enum.count(&check_positions/1)
+    end
+
+    defp check_positions([index1, index2, char, password]) do
+      [index1, index2]
+      |> Enum.map(&String.at(password, &1 - 1))
+      |> Enum.filter(&(&1 == char))
+      |> length == 1
     end
   end
 end
