@@ -99,14 +99,11 @@ defmodule Adventofcode.Day05BinaryBoarding do
 
     def to_s(map) do
       Enum.map_join(0..127, "\n", fn front ->
-        Enum.map_join(0..7, "", fn left ->
-          if MapSet.member?(map, {front, left}) do
-            "#"
-          else
-            "."
-          end
-        end) <> " #{front}"
+        Enum.map_join(0..7, "", &seat_to_s({front, &1} in map)) <> " #{front}"
       end)
     end
+
+    defp seat_to_s(true), do: "#"
+    defp seat_to_s(false), do: "."
   end
 end
