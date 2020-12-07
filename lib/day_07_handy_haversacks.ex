@@ -1,14 +1,14 @@
 defmodule Adventofcode.Day07HandyHaversacks do
   use Adventofcode
 
-  alias __MODULE__.{Graph, Parser}
+  alias __MODULE__.{Graph, Parser, Part1}
 
   def part_1(input) do
     input
     |> Parser.parse()
     |> Graph.new()
-    |> Graph.search()
-    |> Enum.count
+    |> Part1.solve()
+    |> Enum.count()
   end
 
   # def part_2(input) do
@@ -18,23 +18,12 @@ defmodule Adventofcode.Day07HandyHaversacks do
   defmodule Graph do
     defstruct [:g, :bags]
 
-    @top "shiny gold"
-
     def new(bags) do
       graph = %__MODULE__{g: :digraph.new(), bags: bags}
-
-      :digraph.add_vertex(graph.g, @top, 1)
 
       Enum.each(bags, &add_bag(graph, &1))
 
       graph
-    end
-
-    def search(%Graph{} = graph) do
-      graph.bags
-      |> Enum.filter(fn [bag | _] -> bag != @top end)
-      |> Enum.map(fn [bag | _] -> :digraph.get_path(graph.g, bag, @top) end)
-      |> Enum.filter(& &1 != false)
     end
 
     defp add_bag(%Graph{} = graph, [bag | rules]) do
@@ -42,8 +31,19 @@ defmodule Adventofcode.Day07HandyHaversacks do
 
       Enum.each(rules, fn [quantity, bag2] ->
         :digraph.add_vertex(graph.g, bag2)
-        :digraph.add_edge(graph.g, bag, bag2, quantity)
+        :digraph.add_edge(graph.g, {bag, bag2}, bag, bag2, quantity)
       end)
+    end
+  end
+
+  defmodule Part1 do
+    @top "shiny gold"
+
+    def solve(%Graph{} = graph) do
+      graph.bags
+      |> Enum.filter(fn [bag | _] -> bag != @top end)
+      |> Enum.map(fn [bag | _] -> :digraph.get_path(graph.g, bag, @top) end)
+      |> Enum.filter(&(&1 != false))
     end
   end
 
@@ -69,7 +69,7 @@ defmodule Adventofcode.Day07HandyHaversacks do
     defp parse_bag_contents(contents) do
       ~r/(\d+) (\w+ \w+)/
       |> Regex.scan(contents)
-      |> Enum.map(&Enum.drop(&1, 1))
+      |> Enum.map(fn [_, quantity, bag] -> [String.to_integer(quantity), bag] end)
     end
   end
 end
