@@ -1,4 +1,8 @@
 defmodule Mix.Tasks.Day.New do
+  @moduledoc """
+  Generate module for a day with a name and read puzzle input from STDIN
+  """
+
   def run([name]) do
     module_name = Macro.camelize(name)
 
