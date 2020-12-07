@@ -33,22 +33,11 @@ defmodule Adventofcode.Day07HandyHaversacksTest do
     end
 
     test "bag colors that can eventually contain at least one shiny gold bag is 4" do
-      assert [
-               ["light red", ["1", "bright white"], ["2", "muted yellow"]],
-               ["dark orange", ["3", "bright white"], ["4", "muted yellow"]],
-               ["bright white", ["1", "shiny gold"]],
-               ["muted yellow", ["2", "shiny gold"], ["9", "faded blue"]],
-               ["shiny gold", ["1", "dark olive"], ["2", "vibrant plum"]],
-               ["dark olive", ["3", "faded blue"], ["4", "dotted black"]],
-               ["vibrant plum", ["5", "faded blue"], ["6", "dotted black"]],
-               ["faded blue"],
-               ["dotted black"]
-             ] = @input |> part_1
+      assert 4 = @input |> part_1
     end
 
-    @tag :skip
     test_with_puzzle_input do
-      assert 1337 = puzzle_input() |> part_1()
+      assert 335 = puzzle_input() |> part_1()
     end
   end
 

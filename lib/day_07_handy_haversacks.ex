@@ -8,6 +8,7 @@ defmodule Adventofcode.Day07HandyHaversacks do
     |> Parser.parse()
     |> Graph.new()
     |> Graph.search()
+    |> Enum.count
   end
 
   # def part_2(input) do
@@ -15,27 +16,33 @@ defmodule Adventofcode.Day07HandyHaversacks do
   # end
 
   defmodule Graph do
-    @spec new(any) :: :digraph.graph()
-    def new(bags) do
-      graph = :digraph.new([:acyclic])
+    defstruct [:g, :bags]
 
-      :digraph.add_vertex(graph, "shiny gold", 1)
+    @top "shiny gold"
+
+    def new(bags) do
+      graph = %__MODULE__{g: :digraph.new(), bags: bags}
+
+      :digraph.add_vertex(graph.g, @top, 1)
 
       Enum.each(bags, &add_bag(graph, &1))
 
       graph
     end
 
-    def search(graph) do
-      :digraph_utils.arborescence_root(graph)
+    def search(%Graph{} = graph) do
+      graph.bags
+      |> Enum.filter(fn [bag | _] -> bag != @top end)
+      |> Enum.map(fn [bag | _] -> :digraph.get_path(graph.g, bag, @top) end)
+      |> Enum.filter(& &1 != false)
     end
 
-    defp add_bag(graph, [bag | rules]) do
-      :digraph.add_vertex(graph, bag, 1)
+    defp add_bag(%Graph{} = graph, [bag | rules]) do
+      :digraph.add_vertex(graph.g, bag, 1)
 
       Enum.each(rules, fn [quantity, bag2] ->
-        :digraph.add_vertex(graph, bag2)
-        :digraph.add_edge(graph, bag, bag2, quantity)
+        :digraph.add_vertex(graph.g, bag2)
+        :digraph.add_edge(graph.g, bag, bag2, quantity)
       end)
     end
   end
