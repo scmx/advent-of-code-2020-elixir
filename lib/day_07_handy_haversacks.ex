@@ -1,7 +1,7 @@
 defmodule Adventofcode.Day07HandyHaversacks do
   use Adventofcode
 
-  alias __MODULE__.{Graph, Parser, Part1}
+  alias __MODULE__.{Graph, Parser, Part1, Part2}
 
   def part_1(input) do
     input
@@ -11,9 +11,12 @@ defmodule Adventofcode.Day07HandyHaversacks do
     |> Enum.count()
   end
 
-  # def part_2(input) do
-  #   input
-  # end
+  def part_2(input) do
+    input
+    |> Parser.parse()
+    |> Graph.new()
+    |> Part2.solve()
+  end
 
   defmodule Graph do
     defstruct [:g, :bags]
@@ -44,6 +47,35 @@ defmodule Adventofcode.Day07HandyHaversacks do
       |> Enum.filter(fn [bag | _] -> bag != @top end)
       |> Enum.map(fn [bag | _] -> :digraph.get_path(graph.g, bag, @top) end)
       |> Enum.filter(&(&1 != false))
+    end
+  end
+
+  defmodule Part2 do
+    @top "shiny gold"
+
+    def solve(%Graph{} = graph) do
+      graph
+      |> paths({@top, 1})
+      |> Enum.map(&quantities/1)
+      |> Enum.map(&sum/1)
+      |> :lists.flatten()
+      |> Enum.sum()
+    end
+
+    defp paths(%Graph{} = graph, {vertex, _quantity}) do
+      :digraph.edges(graph.g, vertex)
+      |> Enum.filter(&(elem(&1, 0) == vertex))
+      |> Enum.map(&:digraph.edge(graph.g, &1))
+      |> Enum.map(fn {{_, _}, _, vertex, quantity} -> {vertex, quantity} end)
+      |> Enum.map(&[&1 | paths(graph, &1)])
+    end
+
+    def quantities([{_vertex, quantity} | vertices]) do
+      [quantity | vertices |> Enum.map(&quantities/1)]
+    end
+
+    def sum([quantity | quantities]) do
+      [quantity | quantities |> Enum.map(fn [q | rest] -> sum([q * quantity | rest]) end)]
     end
   end
 
