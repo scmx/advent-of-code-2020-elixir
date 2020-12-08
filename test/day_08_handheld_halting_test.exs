@@ -24,4 +24,14 @@ defmodule Adventofcode.Day08HandheldHaltingTest do
       assert 1384 = puzzle_input() |> part_1()
     end
   end
+
+  describe "part_2/1" do
+    test "accumulator after the program terminates" do
+      assert 8 = @input |> part_2()
+    end
+
+    test_with_puzzle_input do
+      assert 761 = puzzle_input() |> part_2()
+    end
+  end
 end

@@ -1,7 +1,7 @@
 defmodule Adventofcode.Day08HandheldHalting do
   use Adventofcode
 
-  alias __MODULE__.{Parser, Part1, State}
+  alias __MODULE__.{Parser, Part1, Part2, State}
 
   def part_1(input) do
     input
@@ -11,12 +11,22 @@ defmodule Adventofcode.Day08HandheldHalting do
     |> State.accumulator()
   end
 
+  def part_2(input) do
+    input
+    |> Parser.parse()
+    |> State.new()
+    |> Part2.run()
+    |> Enum.find(& &1.halt)
+    |> State.accumulator()
+  end
+
   defmodule State do
     defstruct accumulator: 0,
               instruction: 0,
               program: %{},
               history: MapSet.new(),
-              loop: false
+              loop: false,
+              halt: false
 
     def new(%{} = program) do
       %__MODULE__{program: program}
@@ -47,6 +57,13 @@ defmodule Adventofcode.Day08HandheldHalting do
       state
       |> instruction(+1)
     end
+
+    def swap_operation(%State{program: program} = state, {instruction, {operation, argument}}) do
+      %{state | program: Map.put(program, instruction, {swap_operation(operation), argument})}
+    end
+
+    defp swap_operation(:jmp), do: :nop
+    defp swap_operation(:nop), do: :jmp
   end
 
   defmodule Part1 do
@@ -55,10 +72,22 @@ defmodule Adventofcode.Day08HandheldHalting do
         state.instruction in state.history ->
           %{state | loop: true}
 
+        !Map.has_key?(state.program, state.instruction) ->
+          %{state | halt: true}
+
         {operation, argument} = Map.get(state.program, state.instruction) ->
           apply(State, operation, [state, argument])
           |> run()
       end
+    end
+  end
+
+  defmodule Part2 do
+    def run(%State{} = state) do
+      state.program
+      |> Enum.filter(fn {_, {operation, _}} -> operation != :acc end)
+      |> Enum.map(&State.swap_operation(state, &1))
+      |> Enum.map(&Part1.run/1)
     end
   end
 
