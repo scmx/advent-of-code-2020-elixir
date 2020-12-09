@@ -16,12 +16,13 @@ defmodule Adventofcode.Day09EncodingErrorTest do
   end
 
   describe "part_2/1" do
-    # test "" do
-    #   assert 1337 = 1337 |> part_2()
-    # end
+    test "encryption weakness in your XMAS-encrypted list of numbers?" do
+      assert 62 = @example |> part_2(5)
+    end
 
-    # test_with_puzzle_input do
-    #   assert 1337 = puzzle_input() |> part_2()
-    # end
+    @tag :slow
+    test_with_puzzle_input do
+      assert 96_081_673 = puzzle_input() |> part_2()
+    end
   end
 end
