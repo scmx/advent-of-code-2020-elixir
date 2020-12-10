@@ -16,8 +16,14 @@ defmodule Adventofcode do
   end
 
   @doc false
-  def read_puzzle_input_for(module, options) do
-    case File.read(Path.join(["input", input_filename(module) <> ".txt"])) do
+  def read_puzzle_input_for(module, options) when is_atom(module) do
+    module
+    |> input_filename
+    |> read_puzzle_input_for(options)
+  end
+
+  def read_puzzle_input_for(filename, options) when is_binary(filename) do
+    case File.read(Path.join(["input", filename <> ".txt"])) do
       {:ok, data} -> trim(data, Keyword.get(options, :trim))
       {:error, _} -> nil
     end
