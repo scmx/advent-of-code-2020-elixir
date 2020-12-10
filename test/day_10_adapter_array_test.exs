@@ -18,12 +18,16 @@ defmodule Adventofcode.Day10AdapterArrayTest do
   end
 
   describe "part_2/1" do
-    # test "" do
-    #   assert 1337 = 1337 |> part_2()
-    # end
+    test "total number of distinct ways you can arrange the adapters to connect the charging outlet to your device?" do
+      assert 8 = @example1 |> part_2()
+    end
 
-    # test_with_puzzle_input do
-    #   assert 1337 = puzzle_input() |> part_2()
-    # end
+    test "can connect the charging outlet to your device in 19208 distinct arrangements" do
+      assert 19208 = @example2 |> part_2()
+    end
+
+    test_with_puzzle_input do
+      assert 226_775_649_501_184 = puzzle_input() |> part_2()
+    end
   end
 end
