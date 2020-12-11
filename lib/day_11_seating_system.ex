@@ -11,22 +11,28 @@ defmodule Adventofcode.Day11SeatingSystem do
     |> State.count_occupied()
   end
 
-  # def part_2(input) do
-  #   input
-  # end
+  def part_2(input) do
+    input
+    |> parse()
+    |> State.new(tolerant: true)
+    |> step_until_stable
+    |> State.count_occupied()
+  end
 
   defmodule State do
-    @enforce_keys [:grid, :x_range, :y_range]
-    defstruct grid: %{}, x_range: 0..0, y_range: 0..0, step: 0
+    @enforce_keys [:grid, :x_range, :y_range, :tolerant]
+    defstruct grid: %{}, x_range: 0..0, y_range: 0..0, step: 0, tolerant: false
 
-    def new(grid) do
+    def new(grid, options) do
       width = grid |> hd |> Enum.count()
       height = grid |> Enum.count()
+      tolerant = Keyword.get(options, :tolerant, false)
 
       %__MODULE__{
         grid: grid |> List.flatten() |> Enum.into(%{}),
         x_range: 0..(width - 1),
-        y_range: 0..(height - 1)
+        y_range: 0..(height - 1),
+        tolerant: tolerant
       }
     end
 
@@ -46,14 +52,18 @@ defmodule Adventofcode.Day11SeatingSystem do
     if next.grid == state.grid, do: state, else: step_until_stable(next)
   end
 
-  def step(%State{} = state) do
+  def step(%State{tolerant: tolerant} = state) do
     Enum.reduce(state.grid, %{state | step: state.step + 1}, fn {{x, y}, char}, acc ->
-      neighbours = get_neighbours({x, y}, state)
+      neighbours =
+        if tolerant,
+          do: get_occupied_visible({x, y}, state),
+          else: get_neighbours({x, y}, state)
 
       cond do
         char == ?. -> acc
         char == ?L && neighbours == 0 -> State.put(acc, {x, y}, ?#)
-        char == ?# && neighbours >= 4 -> State.put(acc, {x, y}, ?L)
+        char == ?# && neighbours >= 4 && !tolerant -> State.put(acc, {x, y}, ?L)
+        char == ?# && neighbours >= 5 -> State.put(acc, {x, y}, ?L)
         true -> acc
       end
     end)
@@ -73,6 +83,22 @@ defmodule Adventofcode.Day11SeatingSystem do
     @neighbours
     |> Enum.map(fn {dx, dy} -> State.get(state, {x + dx, y + dy}) end)
     |> Enum.count(&(&1 == ?#))
+  end
+
+  def get_occupied_visible({x, y}, state) do
+    @neighbours
+    |> Enum.count(&find_occupied?({x, y}, &1, state))
+  end
+
+  defp find_occupied?({x, y}, {dx, dy}, state) do
+    pos = {x + dx, y + dy}
+
+    case State.get(state, pos) do
+      nil -> false
+      ?# -> true
+      ?L -> false
+      ?. -> find_occupied?(pos, {dx, dy}, state)
+    end
   end
 
   def parse(input) do

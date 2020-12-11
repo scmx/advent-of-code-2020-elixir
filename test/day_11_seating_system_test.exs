@@ -81,12 +81,12 @@ defmodule Adventofcode.Day11SeatingSystemTest do
       .#.
       """
 
-      assert 5 = get_neighbours({1, 1}, dummy |> parse() |> State.new())
+      assert 5 = get_neighbours({1, 1}, dummy |> parse() |> State.new(tolerant: false))
     end
 
     test "once people stop moving around, you count 37 occupied seats." do
       [input | layouts] = @layouts |> String.trim_trailing() |> String.split("\n\n")
-      initial = input |> parse() |> State.new()
+      initial = input |> parse() |> State.new(tolerant: false)
 
       result =
         Enum.reduce(layouts, initial, fn expected, state ->
@@ -115,12 +115,42 @@ defmodule Adventofcode.Day11SeatingSystemTest do
   end
 
   describe "part_2/1" do
-    # test "" do
-    #   assert 1337 = 1337 |> part_2()
-    # end
+    @example """
+    .......#.
+    ...#.....
+    .#.......
+    .........
+    ..#L....#
+    ....#....
+    .........
+    #........
+    ...#.....
+    """
+    test "the empty seat below would see eight occupied seats" do
+      assert 8 = get_occupied_visible({3, 4}, @example |> parse() |> State.new(tolerant: true))
+    end
 
-    # test_with_puzzle_input do
-    #   assert 1337 = puzzle_input() |> part_2()
-    # end
+    @example """
+    .##.##.
+    #.#.#.#
+    ##...##
+    ...L...
+    ##...##
+    #.#.#.#
+    .##.##.
+    """
+    test "empty seat below would see no occupied seats" do
+      assert 0 = get_occupied_visible({3, 3}, @example |> parse() |> State.new(tolerant: true))
+    end
+
+    test "people stop shifting around and the seating area reaches equilibrium. you count 26 occupied seats" do
+      input = @layouts |> String.split("\n\n") |> hd()
+
+      assert 26 = input |> part_2
+    end
+
+    test_with_puzzle_input do
+      assert 2023 = puzzle_input() |> part_2()
+    end
   end
 end
