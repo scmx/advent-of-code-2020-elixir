@@ -6,6 +6,7 @@ defmodule Adventofcode.Day11SeatingSystem do
   def part_1(input) do
     input
     |> parse()
+    |> State.new(tolerant: false)
     |> step_until_stable
     |> State.count_occupied()
   end
@@ -58,18 +59,19 @@ defmodule Adventofcode.Day11SeatingSystem do
     end)
   end
 
+  @neighbours [
+    {-1, -1},
+    {0, -1},
+    {1, -1},
+    {-1, 0},
+    {1, 0},
+    {-1, 1},
+    {0, 1},
+    {1, 1}
+  ]
   def get_neighbours({x, y}, state) do
-    [
-      {x - 1, y - 1},
-      {x, y - 1},
-      {x + 1, y - 1},
-      {x - 1, y},
-      {x + 1, y},
-      {x - 1, y + 1},
-      {x, y + 1},
-      {x + 1, y + 1}
-    ]
-    |> Enum.map(&State.get(state, &1))
+    @neighbours
+    |> Enum.map(fn {dx, dy} -> State.get(state, {x + dx, y + dy}) end)
     |> Enum.count(&(&1 == ?#))
   end
 
@@ -80,7 +82,6 @@ defmodule Adventofcode.Day11SeatingSystem do
     |> Enum.map(&String.to_charlist/1)
     |> Enum.with_index()
     |> Enum.map(&do_parse/1)
-    |> State.new()
   end
 
   defp do_parse({chars, y}) do

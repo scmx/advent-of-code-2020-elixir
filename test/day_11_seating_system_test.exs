@@ -3,7 +3,7 @@ defmodule Adventofcode.Day11SeatingSystemTest do
 
   import Adventofcode.Day11SeatingSystem
 
-  alias Adventofcode.Day11SeatingSystem.{Printer}
+  alias Adventofcode.Day11SeatingSystem.{Printer, State}
 
   @layouts """
   L.LL.LL.LL
@@ -81,29 +81,32 @@ defmodule Adventofcode.Day11SeatingSystemTest do
       .#.
       """
 
-      assert 5 = get_neighbours({1, 1}, parse(dummy))
+      assert 5 = get_neighbours({1, 1}, dummy |> parse() |> State.new())
     end
 
     test "once people stop moving around, you count 37 occupied seats." do
       [input | layouts] = @layouts |> String.trim_trailing() |> String.split("\n\n")
-      initial = input |> parse()
+      initial = input |> parse() |> State.new()
 
-      Enum.reduce(layouts, initial, fn expected, state ->
-        next = state |> step
-        actual = Printer.print(next)
+      result =
+        Enum.reduce(layouts, initial, fn expected, state ->
+          next = state |> step
+          actual = Printer.print(next)
 
-        assert actual == expected, """
-        Expected:
+          assert actual == expected, """
+          Expected:
 
-        #{expected}
+          #{expected}
 
-        but was:
+          but was:
 
-        #{actual}
-        """
+          #{actual}
+          """
 
-        next
-      end)
+          next
+        end)
+
+      assert 37 = State.count_occupied(result)
     end
 
     test_with_puzzle_input do
