@@ -3,46 +3,47 @@ defmodule Adventofcode.Day12RainRiskTest do
 
   import Adventofcode.Day12RainRisk
 
-  alias Adventofcode.Day12RainRisk.{Part1}
+  alias Adventofcode.Day12RainRisk.{Captain, State}
+
+  @example """
+  F10
+  N3
+  F7
+  R90
+  F11
+  """
 
   describe "part_1/1" do
-    @example """
-    F10
-    N3
-    F7
-    R90
-    F11
-    """
-    test "At the end of these instructions, the ship's position is 17 + 8 = 25" do
+    test "at the end of these instructions, the ship's position is 17 + 8 = 25" do
       assert 25 = @example |> part_1()
     end
 
-    test "moving N1 results in %{north: 1}" do
-      assert %{north: 1} = "N1" |> parse |> travel(Part1)
+    test "N1 results in north 1" do
+      assert State.part_1(ship: {0, 1}) == Captain.operate(["N1"], State.part_1())
     end
 
-    test "moving S1 results in %{north: -1}" do
-      assert %{north: -1} = "S1" |> parse |> travel(Part1)
+    test "S1 results in north -1" do
+      assert State.part_1(ship: {0, -1}) == Captain.operate(["S1"], State.part_1())
     end
 
-    test "moving E1 results in %{east: 1}" do
-      assert %{east: 1} = "E1" |> parse |> travel(Part1)
+    test "E1 results in east 1" do
+      assert State.part_1(ship: {1, 0}) == Captain.operate(["E1"], State.part_1())
     end
 
-    test "moving W1 results in %{east: -1}" do
-      assert %{east: -1} = "W1" |> parse |> travel(Part1)
+    test "W1 results in east -1" do
+      assert State.part_1(ship: {-1, 0}) == Captain.operate(["W1"], State.part_1())
     end
 
-    test "moving R90 results in %{direction: :south}" do
-      assert %{direction: :south} = "R90" |> parse |> travel(Part1)
+    test "R90 results in direction south" do
+      assert State.part_1(waypoint: {0, -1}) == Captain.operate(["R90"], State.part_1())
     end
 
-    test "moving L90 results in %{direction: :north}" do
-      assert %{direction: :north} = "L90" |> parse |> travel(Part1)
+    test "L90 results in direction north" do
+      assert State.part_1(waypoint: {0, 1}) == Captain.operate(["L90"], State.part_1())
     end
 
-    test "moving F1 results in %{east: 1}" do
-      assert %{east: 1} = "F1" |> parse |> travel(Part1)
+    test "F1 results in east 1" do
+      assert State.part_1(ship: {1, 0}) == Captain.operate(["F1"], State.part_1())
     end
 
     test_with_puzzle_input do

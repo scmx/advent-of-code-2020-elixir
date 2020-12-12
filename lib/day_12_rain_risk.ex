@@ -1,12 +1,12 @@
 defmodule Adventofcode.Day12RainRisk do
   use Adventofcode
 
-  alias __MODULE__.{Part1, Part2, State}
+  alias __MODULE__.{Captain, Position, State, Waypoint}
 
   def part_1(input) do
     input
     |> parse
-    |> travel(Part1)
+    |> Captain.operate(State.part_1())
     |> manhattan_distance
   end
 
@@ -14,56 +14,61 @@ defmodule Adventofcode.Day12RainRisk do
   #   input
   # end
 
+  defmodule Captain do
+    def operate("E" <> val, state), do: State.move(state, {String.to_integer(val), 0})
+    def operate("W" <> val, state), do: State.move(state, {-String.to_integer(val), 0})
+    def operate("N" <> val, state), do: State.move(state, {0, String.to_integer(val)})
+    def operate("S" <> val, state), do: State.move(state, {0, -String.to_integer(val)})
+    def operate("R" <> val, state), do: State.rotate(state, String.to_integer(val))
+    def operate("L" <> val, state), do: State.rotate(state, 360 - String.to_integer(val))
+    def operate("F" <> val, state), do: State.forward(state, String.to_integer(val))
+
+    def operate(instructions, state), do: Enum.reduce(instructions, state, &operate/2)
+  end
+
   defmodule State do
-    defstruct east: 0, north: 0, direction: :east
+    @enforce_keys [:waypoint, :logic]
+    defstruct ship: {0, 0}, waypoint: nil, logic: nil
 
-    def new, do: %__MODULE__{}
-  end
+    def part_1(opts \\ []), do: struct(__MODULE__, [logic: :part_1, waypoint: {1, 0}] ++ opts)
 
-  defmodule Part1 do
-    def move(:west, %State{} = state, val), do: move(:east, state, -val)
-
-    def move(:east, %State{east: east} = state, val) do
-      %{state | east: east + val}
+    def move(%State{logic: :part_1} = state, {east, north}) do
+      %{state | ship: Position.move(state.ship, {east, north})}
     end
 
-    def move(:south, %State{} = state, val), do: move(:north, state, -val)
-
-    def move(:north, %State{north: north} = state, val) do
-      %{state | north: north + val}
     end
 
-    @directions [:east, :south, :west, :north]
-    def right(%State{direction: direction} = state, val) do
-      current = Enum.find_index(@directions, &(&1 == direction))
-      direction = Enum.at(@directions, rem(current + div(val, 90), length(@directions)))
-      %{state | direction: direction}
+    def rotate(%State{} = state, degrees) do
+      %{state | waypoint: Waypoint.rotate(state.waypoint, degrees)}
     end
 
-    def forward(%State{} = state, val), do: move(state.direction, state, val)
+    def forward(%State{} = state, 0), do: state
+
+    def forward(%State{} = state, times) do
+      %{state | ship: Position.move(state.ship, state.waypoint)}
+      |> forward(times - 1)
+    end
   end
 
-  defmodule Part2 do
+  defmodule Position do
+    def move({east, north}, {dx, dy}), do: {east + dx, north + dy}
   end
 
-  def travel(instructions, module) do
-    Enum.reduce(instructions, State.new(), fn
-      {"N", val}, acc -> apply(module, :move, [:north, acc, val])
-      {"S", val}, acc -> apply(module, :move, [:south, acc, val])
-      {"E", val}, acc -> apply(module, :move, [:east, acc, val])
-      {"W", val}, acc -> apply(module, :move, [:west, acc, val])
-      {"R", val}, acc -> apply(module, :right, [acc, val])
-      {"L", val}, acc -> apply(module, :right, [acc, -val])
-      {"F", val}, acc -> apply(module, :forward, [acc, val])
-    end)
+  defmodule Waypoint do
+    def rotate({east, north}, 90), do: {east, north} |> transpose |> flip
+    def rotate({east, north}, 180), do: {east, north} |> flip |> mirror
+    def rotate({east, north}, 270), do: {east, north} |> transpose |> mirror
+
+    defp transpose({east, north}), do: {north, east}
+    defp mirror({east, north}), do: {east * -1, north}
+    defp flip({east, north}), do: {east, north * -1}
   end
+
+  def manhattan_distance(%State{ship: {east, north}}), do: abs(east) + abs(north)
 
   def parse(input) do
     input
     |> String.trim()
     |> String.split("\n")
-    |> Enum.map(&{String.at(&1, 0), String.to_integer(String.slice(&1, 1..-1))})
   end
-
-  def manhattan_distance(%State{east: east, north: north}), do: abs(east) + abs(north)
 end
