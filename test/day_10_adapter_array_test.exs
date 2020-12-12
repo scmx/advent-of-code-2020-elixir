@@ -23,7 +23,7 @@ defmodule Adventofcode.Day10AdapterArrayTest do
     end
 
     test "can connect the charging outlet to your device in 19208 distinct arrangements" do
-      assert 19208 = @example2 |> part_2()
+      assert 19_208 = @example2 |> part_2()
     end
 
     test_with_puzzle_input do

@@ -85,7 +85,7 @@ defmodule Adventofcode.Day12RainRiskTest do
     end
 
     test_with_puzzle_input do
-      assert 89984 = puzzle_input() |> part_2()
+      assert 89_984 = puzzle_input() |> part_2()
     end
   end
 end
