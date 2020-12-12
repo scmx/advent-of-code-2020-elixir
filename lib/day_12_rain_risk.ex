@@ -10,9 +10,12 @@ defmodule Adventofcode.Day12RainRisk do
     |> manhattan_distance
   end
 
-  # def part_2(input) do
-  #   input
-  # end
+  def part_2(input) do
+    input
+    |> parse
+    |> Captain.operate(State.part_2())
+    |> manhattan_distance
+  end
 
   defmodule Captain do
     def operate("E" <> val, state), do: State.move(state, {String.to_integer(val), 0})
@@ -31,11 +34,14 @@ defmodule Adventofcode.Day12RainRisk do
     defstruct ship: {0, 0}, waypoint: nil, logic: nil
 
     def part_1(opts \\ []), do: struct(__MODULE__, [logic: :part_1, waypoint: {1, 0}] ++ opts)
+    def part_2(opts \\ []), do: struct(__MODULE__, [logic: :part_2, waypoint: {10, 1}] ++ opts)
 
     def move(%State{logic: :part_1} = state, {east, north}) do
       %{state | ship: Position.move(state.ship, {east, north})}
     end
 
+    def move(%State{logic: :part_2} = state, {east, north}) do
+      %{state | waypoint: Position.move(state.waypoint, {east, north})}
     end
 
     def rotate(%State{} = state, degrees) do

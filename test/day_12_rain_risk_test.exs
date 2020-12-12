@@ -52,12 +52,40 @@ defmodule Adventofcode.Day12RainRiskTest do
   end
 
   describe "part_2/1" do
-    # test "" do
-    #   assert 1337 = 1337 |> part_2()
-    # end
+    test "After these operations, the ship's Manhattan distance is 214 + 72 = 286" do
+      assert 286 = @example |> part_2()
+    end
 
-    # test_with_puzzle_input do
-    #   assert 1337 = puzzle_input() |> part_2()
-    # end
+    test "N1 results in north +1" do
+      assert State.part_2(waypoint: {10, 2}) == Captain.operate(["N1"], State.part_2())
+    end
+
+    test "S1 results in north -1" do
+      assert State.part_2(waypoint: {10, 0}) == Captain.operate(["S1"], State.part_2())
+    end
+
+    test "E1 results in east +1" do
+      assert State.part_2(waypoint: {11, 1}) == Captain.operate(["E1"], State.part_2())
+    end
+
+    test "W1 results in east -1" do
+      assert State.part_2(waypoint: {9, 1}) == Captain.operate(["W1"], State.part_2())
+    end
+
+    test "R90 results in direction south" do
+      assert State.part_2(waypoint: {1, -10}) == Captain.operate(["R90"], State.part_2())
+    end
+
+    test "L90 results in direction north" do
+      assert State.part_2(waypoint: {-1, 10}) == Captain.operate(["L90"], State.part_2())
+    end
+
+    test "F1 results in east 1" do
+      assert State.part_2(ship: {10, 1}) == Captain.operate(["F1"], State.part_2())
+    end
+
+    test_with_puzzle_input do
+      assert 89984 = puzzle_input() |> part_2()
+    end
   end
 end
