@@ -109,6 +109,7 @@ defmodule Adventofcode.Day11SeatingSystemTest do
       assert 37 = State.count_occupied(result)
     end
 
+    @tag :slow
     test_with_puzzle_input do
       assert 2249 = puzzle_input() |> part_1()
     end
@@ -149,6 +150,7 @@ defmodule Adventofcode.Day11SeatingSystemTest do
       assert 26 = input |> part_2
     end
 
+    @tag :slow
     test_with_puzzle_input do
       assert 2023 = puzzle_input() |> part_2()
     end
