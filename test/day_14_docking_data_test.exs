@@ -3,14 +3,14 @@ defmodule Adventofcode.Day14DockingDataTest do
 
   import Adventofcode.Day14DockingData
 
-  @example """
-  mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
-  mem[8] = 11
-  mem[7] = 101
-  mem[8] = 0
-  """
-
   describe "part_1/1" do
+    @example """
+    mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+    mem[8] = 11
+    mem[7] = 101
+    mem[8] = 0
+    """
+
     test "what is the sum of all values left in memory after it completes?" do
       assert 165 = @example |> part_1()
     end
