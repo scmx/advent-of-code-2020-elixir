@@ -19,12 +19,12 @@ defmodule Adventofcode.Day13ShuttleSearchTest do
   end
 
   describe "part_2/1" do
-    # test "" do
-    #   assert 1337 = @example |> part_2()
-    # end
+    test "the earliest timestamp at which this occurs is 1068781" do
+      assert 1_068_781 = @example |> part_2()
+    end
 
-    # test_with_puzzle_input do
-    #   assert 1337 = puzzle_input() |> part_2()
-    # end
+    test_with_puzzle_input do
+      assert 294_354_277_694_107 = puzzle_input() |> part_2()
+    end
   end
 end
