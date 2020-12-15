@@ -5,12 +5,12 @@ defmodule Adventofcode.Day15RambunctiousRecitationTest do
 
   alias Adventofcode.Day15RambunctiousRecitation.Memory
 
+  @example "0,3,6"
   describe "part_1/1" do
-    @example "0,3,6"
     @expected [0, 3, 6, 0, 3, 3, 1, 0, 4, 0]
     test "suppose the starting numbers are 0,3,6" do
       initial = @example |> parse |> Memory.new()
-      memory = initial |> Memory.play()
+      memory = initial |> Memory.play(2020)
 
       @expected
       |> Enum.with_index()

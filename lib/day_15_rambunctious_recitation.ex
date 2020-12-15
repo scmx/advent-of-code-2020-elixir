@@ -7,7 +7,7 @@ defmodule Adventofcode.Day15RambunctiousRecitation do
     input
     |> parse
     |> Memory.new()
-    |> Memory.play()
+    |> Memory.play(2020)
     |> Memory.by_turn(2020)
   end
 
@@ -26,14 +26,14 @@ defmodule Adventofcode.Day15RambunctiousRecitation do
       %__MODULE__{turn: turn, turns: turns, spoken: spoken}
     end
 
-    def play(%Memory{turn: 2020} = memory), do: memory
+    def play(%Memory{turn: last} = memory, last), do: memory
 
-    def play(%Memory{} = memory), do: memory |> step() |> play()
+    def play(%Memory{} = memory, last), do: memory |> step() |> play(last)
 
     def step(%Memory{} = memory) do
-      last = by_turn(memory, memory.turn)
+      previous = by_turn(memory, memory.turn)
 
-      case by_spoken(memory, last) do
+      case by_spoken(memory, previous) do
         [_num] -> speak(memory, 0)
         [num, num2 | _] -> speak(memory, num - num2)
       end
