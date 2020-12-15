@@ -28,12 +28,14 @@ defmodule Adventofcode.Day15RambunctiousRecitationTest do
   end
 
   describe "part_2/1" do
-    # test "" do
-    #   assert 1337 = 1337 |> part_2()
-    # end
+    @tag :slow
+    test "given 0,3,6, the 30000000th number spoken is 175594" do
+      assert 175_594 = @example |> part_2()
+    end
 
-    # test_with_puzzle_input do
-    #   assert 1337 = puzzle_input() |> part_2()
-    # end
+    @tag :slow
+    test_with_puzzle_input do
+      assert 1065 = puzzle_input() |> part_2()
+    end
   end
 end

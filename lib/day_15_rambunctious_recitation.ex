@@ -11,10 +11,14 @@ defmodule Adventofcode.Day15RambunctiousRecitation do
     |> Memory.by_turn(2020)
   end
 
-  # def part_2(input) do
-  #   input
-  # end
-  #
+  def part_2(input) do
+    input
+    |> parse
+    |> Memory.new()
+    |> Memory.play(30_000_000)
+    |> Memory.by_turn(30_000_000)
+  end
+
   defmodule Memory do
     defstruct turn: 0, turns: %{}, spoken: %{}
 
