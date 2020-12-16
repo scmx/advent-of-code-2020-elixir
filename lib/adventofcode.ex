@@ -8,6 +8,7 @@ defmodule Adventofcode do
   defmacro __using__(options) do
     quote do
       import Adventofcode
+      @moduledoc "Solution for Advent of Code 2020 #{module_pretty(__MODULE__)}"
 
       def puzzle_input do
         read_puzzle_input_for(__MODULE__, unquote(options))
@@ -29,6 +30,9 @@ defmodule Adventofcode do
     end
   end
 
+  defp trim(text, false), do: String.trim_trailing(text, "\n")
+  defp trim(text, _), do: String.trim(text)
+
   defp input_filename(module) do
     module
     |> to_string()
@@ -38,6 +42,13 @@ defmodule Adventofcode do
     |> String.replace(~r/(\w)(\d)/, "\\1_\\2")
   end
 
-  defp trim(text, false), do: String.trim_trailing(text, "\n")
-  defp trim(text, _), do: String.trim(text)
+  defmacro module_pretty({:__MODULE__, [line: _, counter: {module, _}], _}) do
+    module
+    |> to_string()
+    |> String.split(".")
+    |> Enum.at(2)
+    |> Macro.underscore()
+    |> String.replace(~r/(\w)(\d)/, "\\1_\\2")
+    |> String.replace("_", " ")
+  end
 end
