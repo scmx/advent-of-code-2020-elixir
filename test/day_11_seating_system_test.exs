@@ -155,4 +155,22 @@ defmodule Adventofcode.Day11SeatingSystemTest do
       assert 2023 = puzzle_input() |> part_2()
     end
   end
+
+  test "inspect state" do
+    expected =
+      """
+      #State{0
+      .##.##.
+      #.#.#.#
+      ##...##
+      ...L...
+      ##...##
+      #.#.#.#
+      .##.##.
+      }
+      """
+      |> String.trim_trailing()
+
+    assert expected == @example |> parse() |> State.new(tolerant: true) |> inspect
+  end
 end

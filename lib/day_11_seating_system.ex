@@ -135,10 +135,10 @@ defimpl Inspect, for: Adventofcode.Day11SeatingSystem.State do
 
   def inspect(%State{} = state, _opts) do
     concat([
-      "#State{#{state.step} ",
-      break(),
+      "#State{#{state.step}",
+      break("\n"),
       to_string(Printer.print(state)),
-      break(),
+      break("\n"),
       "}"
     ])
   end
