@@ -25,7 +25,7 @@ defmodule Adventofcode.Day16TicketTranslationTest do
     end
 
     test_with_puzzle_input do
-      assert 26980 = puzzle_input() |> part_1()
+      assert 26_980 = puzzle_input() |> part_1()
     end
   end
 
