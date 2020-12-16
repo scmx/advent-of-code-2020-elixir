@@ -3,7 +3,7 @@ defmodule Adventofcode.Day04PassportProcessingTest do
 
   import Adventofcode.Day04PassportProcessing
 
-  alias Adventofcode.Day04PassportProcessing.{Passport, Parser}
+  alias Adventofcode.Day04PassportProcessing.{Parser, Passport}
 
   describe "part_1/1" do
     @batch_file """
