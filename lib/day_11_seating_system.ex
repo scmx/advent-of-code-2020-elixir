@@ -52,22 +52,23 @@ defmodule Adventofcode.Day11SeatingSystem do
     if next.grid == state.grid, do: state, else: step_until_stable(next)
   end
 
-  def step(%State{tolerant: tolerant} = state) do
-    Enum.reduce(state.grid, %{state | step: state.step + 1}, fn {{x, y}, char}, acc ->
-      neighbours =
-        if tolerant,
-          do: get_occupied_visible({x, y}, state),
-          else: get_neighbours({x, y}, state)
-
-      cond do
-        char == ?. -> acc
-        char == ?L && neighbours == 0 -> State.put(acc, {x, y}, ?#)
-        char == ?# && neighbours >= 4 && !tolerant -> State.put(acc, {x, y}, ?L)
-        char == ?# && neighbours >= 5 -> State.put(acc, {x, y}, ?L)
-        true -> acc
-      end
-    end)
+  def step(%State{step: step} = state) do
+    state.grid
+    |> Enum.map(&find_neighbours(state, &1))
+    |> Enum.reduce(%{state | step: step + 1}, &check/2)
   end
+
+  defp find_neighbours(%State{tolerant: true} = state, {{x, y}, char}),
+    do: {{x, y}, char, get_occupied_visible({x, y}, state)}
+
+  defp find_neighbours(%State{} = state, {{x, y}, char}),
+    do: {{x, y}, char, get_neighbours({x, y}, state)}
+
+  defp check({_pos, ?., _}, acc), do: acc
+  defp check({pos, ?L, 0}, acc), do: State.put(acc, pos, ?#)
+  defp check({pos, ?#, n}, %{tolerant: false} = acc) when n >= 4, do: State.put(acc, pos, ?L)
+  defp check({pos, ?#, n}, acc) when n >= 5, do: State.put(acc, pos, ?L)
+  defp check({_pos, _, _}, acc), do: acc
 
   @neighbours [
     {-1, -1},
