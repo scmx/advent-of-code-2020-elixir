@@ -1,5 +1,6 @@
 defmodule Adventofcode.FancyCase do
   @moduledoc """
+  Test case helpers
   """
 
   use ExUnit.CaseTemplate
