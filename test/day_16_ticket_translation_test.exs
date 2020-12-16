@@ -3,6 +3,8 @@ defmodule Adventofcode.Day16TicketTranslationTest do
 
   import Adventofcode.Day16TicketTranslation
 
+  alias Adventofcode.Day16TicketTranslation.{Parser, Part2}
+
   describe "part_1/1" do
     @example """
     class: 1-3 or 5-7
@@ -28,12 +30,25 @@ defmodule Adventofcode.Day16TicketTranslationTest do
   end
 
   describe "part_2/1" do
-    # test "" do
-    #   assert 1337 = 1337 |> part_2()
-    # end
+    @example """
+    class: 0-1 or 4-19
+    row: 0-5 or 8-19
+    seat: 0-13 or 16-19
 
-    # test_with_puzzle_input do
-    #   assert 1337 = puzzle_input() |> part_2()
-    # end
+    your ticket:
+    11,12,13
+
+    nearby tickets:
+    3,9,18
+    15,1,5
+    5,14,9
+    """
+    test "in your ticket, class is 12, row is 11, and seat is 13" do
+      assert 1716 = @example |> Parser.parse() |> Part2.solve("")
+    end
+
+    test_with_puzzle_input do
+      assert 3_021_381_607_403 = puzzle_input() |> part_2()
+    end
   end
 end
